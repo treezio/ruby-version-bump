@@ -24,4 +24,4 @@ jobs:
           echo ${{ steps.ruby_setup.outputs.ruby-prefix }}
       - name: Gemfile Lock
         run: |
-          cat ${{ github.workspace }}/.Gemfile.lock
+          cat ${{ github.workspace }}/Gemfile.lock
