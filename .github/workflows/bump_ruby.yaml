@@ -40,4 +40,5 @@
           with:
             github_token: ${{ secrets.WF_TOKEN }}
             branch: ${{ github.head_ref }}
+            force: true
   
