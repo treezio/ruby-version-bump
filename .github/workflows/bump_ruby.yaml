@@ -23,4 +23,4 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Print version
         run: |
-          echo steps.ruby_setup.outputs.ruby-prefix
+          echo ${{ steps.ruby_setup.outputs.ruby-prefix }}
