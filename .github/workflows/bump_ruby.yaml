@@ -26,7 +26,7 @@ jobs:
 
       - name: Update Gemfile.lock
         run: |
-          bundle config unset frozen
+          bundle config --local deployment false
           bundle update --ruby --verbose
 
       - name: Check Gemfile Lock
