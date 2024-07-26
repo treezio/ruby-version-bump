@@ -27,6 +27,10 @@ jobs:
       - name: Update Gemfile.lock
         run: bundle update --ruby
 
+      - name: Check Gemfile Lock
+        run: |
+          cat ${{ github.workspace }}/Gemfile.lock
+
       - name: Commit changes
         run: |
           git config --global user.name "github-actions[bot]"
