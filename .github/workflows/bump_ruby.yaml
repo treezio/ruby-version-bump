@@ -25,7 +25,7 @@ jobs:
         run: bundle install
 
       - name: Update Gemfile.lock
-        run: bundle lock --update --ruby
+        run: bundle update --ruby
 
       - name: Commit changes
         run: |
