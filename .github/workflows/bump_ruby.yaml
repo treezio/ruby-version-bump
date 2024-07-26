@@ -4,8 +4,6 @@ name: Bump Ruby Bundled Version
 on:
   workflow_dispatch:
   pull_request:
-    paths:
-      - '.ruby-version'
 
 permissions:
   contents: "write"
