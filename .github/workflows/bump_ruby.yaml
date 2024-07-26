@@ -22,3 +22,6 @@ jobs:
       - name: Print version
         run: |
           echo ${{ steps.ruby_setup.outputs.ruby-prefix }}
+      - name: Gemfile Lock
+        run: |
+          cat .Gemfile.lock
