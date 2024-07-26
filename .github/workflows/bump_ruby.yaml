@@ -21,7 +21,7 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Print version
         run: |
-          echo ${{ steps.ruby_setup.outputs.ruby-prefix }}
+          bundle install
       - name: Gemfile Lock
         run: |
           cat ${{ github.workspace }}/Gemfile.lock
