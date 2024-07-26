@@ -1,0 +1,26 @@
+---
+name: Bump Ruby Bundled Version
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.ruby-version'
+
+permissions:
+  contents: "write"
+  pull-requests: "write"
+
+jobs:
+  bump_ruby:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        id: ruby_setup
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Print version
+        run: |
+          echo steps.ruby_setup.outputs.ruby-prefix

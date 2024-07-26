@@ -1,0 +1,95 @@
+---
+name: Bump Ruby Version
+
+pipelineid: "ruby-version"
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.user }}"
+      email: "{{ .github.email }}"
+      owner: "{{ .github.owner }}"
+      repository: "{{ .github.repository }}"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      branch: "{{ .github.branch }}"
+
+sources:
+  RubylatestVersion:
+    kind: githubrelease
+    name: Get the latest Ruby version
+    spec:
+      owner: ruby
+      repository: ruby
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      typefilter:
+        latest: true
+    transformers:
+    - trimprefix: "v"
+    - replacer:
+        from: "_"
+        to: "."
+  AlpineLatestVersion:
+    name: Get latest alpine docker version for ruby {{ source "RubylatestVersion" }}
+    kind: dockerimage
+    dependson:
+      - RubylatestVersion
+    spec:
+      image: ruby
+      architecture: amd64
+      versionfilter:
+        kind: regex
+        pattern: '{{ source "RubylatestVersion" }}-alpine(.*)'
+    transformers:
+      - findsubmatch:
+          pattern: '{{ source "RubylatestVersion" }}-alpine(.*)'
+          captureindex: 1
+
+targets:
+  rubyVersionDockerTag:
+    kind: file
+    sourceid: RubylatestVersion
+    name: Update Docker Image tag for Ruby to {{ source "RubylatestVersion" }} version
+    scmid: default
+    spec:
+      file: .env
+      matchpattern: RUBY_VERSION=.*
+      replacepattern: 'RUBY_VERSION={{ source "RubylatestVersion" }}'
+  rubyVersionFile:
+    kind: file
+    sourceid: RubylatestVersion
+    name: Update Ruby Version in .ruby-version to {{ source "RubylatestVersion" }}
+    scmid: default
+    spec:
+      file: .ruby-version
+      matchpattern: ruby-.*
+      replacepattern: 'ruby-{{ source "RubylatestVersion" }}'
+  gemfileVersion:
+    kind: file
+    sourceid: RubylatestVersion
+    name: Update Ruby Version in Gemfile to {{ source "RubylatestVersion" }}
+    scmid: default
+    spec:
+      file: Gemfile
+      matchpattern: 'ruby "(.*)"'
+      replacepattern: 'ruby "{{ source "RubylatestVersion" }}"'
+  alpineVersionDockerTag:
+    name: Update Docker Image tag for Ruby Alpine docker image to {{ source "RubylatestVersion" }}-alpine{{ source "AlpineLatestVersion" }}
+    kind: file
+    sourceid: AlpineLatestVersion
+    spec:
+      file: .env
+      matchpattern: "ALPINE_VERSION=.*"
+      replacepattern: 'ALPINE_VERSION={{ source "AlpineLatestVersion" }}'
+    scmid: default
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    spec:
+      labels:
+        - dependencies
+    title: Bump Ruby version to {{ source "RubylatestVersion" }}

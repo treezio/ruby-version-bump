@@ -1,0 +1,8 @@
+github:
+  user: "treezio"
+  email: "bump@treez.io"
+  username: "treezio"
+  token: "GITHUB_TOKEN"
+  branch: "main"
+  owner: "treezio"
+  repository: "ruby-version-bump"
