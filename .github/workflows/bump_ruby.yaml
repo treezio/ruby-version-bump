@@ -25,21 +25,21 @@ jobs:
         run: bundle install
 
       - name: Update Gemfile.lock
-        run: bundle update --ruby
+        run: bundle update --ruby --verbose
 
       - name: Check Gemfile Lock
         run: |
           cat ${{ github.workspace }}/Gemfile.lock
 
-      - name: Commit changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add Gemfile.lock
-          git commit -m "Update Gemfile.lock with new Ruby version" || echo "No changes to commit"
+      # - name: Commit changes
+      #   run: |
+      #     git config --global user.name "github-actions[bot]"
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      #     git add Gemfile.lock
+      #     git commit -m "Update Gemfile.lock with new Ruby version" || echo "No changes to commit"
 
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.WF_TOKEN }}
-          branch: ${{ github.head_ref }}
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@v0.6.0
+      #   with:
+      #     github_token: ${{ secrets.WF_TOKEN }}
+      #     branch: ${{ github.head_ref }}
